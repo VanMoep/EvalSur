@@ -17,7 +17,15 @@ class App extends React.Component {
 
   setLeafletMapRef = (map) => (this.leafletMap = map && map.leafletElement);
 
-  getIcons() {}
+  getIcons() {
+    //clear old map
+    const map = this.mapRef.current.leafletElement;
+    map.eachLayer(function (layer) {
+      map.removeLayer(layer);
+    });
+    // get new markers    
+    this.leafletMap.getCenter();
+  }
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition((position) => {
