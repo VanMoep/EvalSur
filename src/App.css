@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+.target {
+  font-size: 1.5em;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -48,12 +52,11 @@
  */
 
 .leaflet-container .leaflet-control-fullscreen a {
-  background-image: url('/images/fullscreen.png');
+  background-image: url("/images/fullscreen.png");
 }
 
-@media (-webkit-min-device-pixel-ratio:2),
-  (min-resolution:192dpi) {
-    .leaflet-container .leaflet-control-fullscreen a {
-    background-image: url('/images/fullscreen@2x.png');
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .leaflet-container .leaflet-control-fullscreen a {
+    background-image: url("/images/fullscreen@2x.png");
   }
 }
