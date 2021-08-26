@@ -40,6 +40,6 @@
     ["access"!="private"]
     (around:<RANGE>,<LAT>,<LON>);
 );
-out;
+out center;
 >;
 out skel qt;
