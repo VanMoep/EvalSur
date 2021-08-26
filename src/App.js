@@ -12,19 +12,29 @@ class App extends React.Component {
 
   constructor() {
     super();
-    this.state = { defaultZoom: 13, defaultCenter: [0, 9], osmRequest: null };
+    this.state = {
+      defaultZoom: 13,
+      defaultCenter: [0, 9],
+      osmRequest: null,
+      defaultRange: 1500
+    };
+    this.getIcons = this.getIcons.bind(this);
   }
 
   setLeafletMapRef = (map) => (this.leafletMap = map && map.leafletElement);
 
   getIcons() {
     //clear old map
-    const map = this.mapRef.current.leafletElement;
-    map.eachLayer(function (layer) {
-      map.removeLayer(layer);
-    });
-    // get new markers    
-    this.leafletMap.getCenter();
+
+    // get new markers
+    const queryOverpass = require("@derhuerst/query-overpass");
+    var requestBody = this.state.osmRequest;
+    requestBody = requestBody
+      .replaceAll("<RANGE>", this.state.defaultRange)
+      .replaceAll("<LAT>", this.leafletMap.getCenter().lat)
+      .replaceAll("<LON>", this.leafletMap.getCenter().lng);
+    console.log(requestBody);
+    queryOverpass(requestBody).then(console.log).catch(console.error);
   }
 
   componentDidMount() {
@@ -33,7 +43,7 @@ class App extends React.Component {
         defaultCenter: [position.coords.latitude, position.coords.longitude]
       });
     });
-    fetch("./osmScript.xml").then((res) =>
+    fetch("././overpassQL.txt").then((res) =>
       res.text().then((text) => this.setState({ osmRequest: text }))
     );
     L.easyButton('<span class="target">	&target;</span>', function (btn, map) {
@@ -41,6 +51,10 @@ class App extends React.Component {
         map.setView([position.coords.latitude, position.coords.longitude]);
       });
     }).addTo(this.leafletMap);
+    L.easyButton('<span class="download">	&DownArrowBar;</span>', () =>
+      this.getIcons()
+    ).addTo(this.leafletMap);
+    console.log(this.leafletMap.getCenter());
   }
 
   render() {
