@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { Map, TileLayer } from "react-leaflet";
+import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "./App.css";
 import "leaflet/dist/leaflet.css";
@@ -16,7 +16,8 @@ class App extends React.Component {
       defaultZoom: 13,
       defaultCenter: [0, 9],
       osmRequest: null,
-      defaultRange: 1500
+      defaultRange: 1500,
+      osmData: []
     };
     this.getIcons = this.getIcons.bind(this);
   }
@@ -26,15 +27,30 @@ class App extends React.Component {
   getIcons() {
     //clear old map
 
-    // get new markers
+    // get new data
     const queryOverpass = require("@derhuerst/query-overpass");
     var requestBody = this.state.osmRequest;
     requestBody = requestBody
       .replaceAll("<RANGE>", this.state.defaultRange)
       .replaceAll("<LAT>", this.leafletMap.getCenter().lat)
       .replaceAll("<LON>", this.leafletMap.getCenter().lng);
-    console.log(requestBody);
-    queryOverpass(requestBody).then(console.log).catch(console.error);
+    console.log(
+      "requesting OSM data for position",
+      this.leafletMap.getCenter()
+    );
+    queryOverpass(requestBody)
+      .then((response) => {
+        this.setState({ osmData: response });
+      })
+      .catch(console.error);
+
+    /*
+     this.state.osmData.forEach(entry =>{
+        if(entry.tags&&entry.tags.name){
+          console.log(entry.tags.name, entry);
+        }
+      })
+    */
   }
 
   componentDidMount() {
@@ -54,7 +70,6 @@ class App extends React.Component {
     L.easyButton('<span class="download">	&DownArrowBar;</span>', () =>
       this.getIcons()
     ).addTo(this.leafletMap);
-    console.log(this.leafletMap.getCenter());
   }
 
   render() {
@@ -71,6 +86,27 @@ class App extends React.Component {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> 
             Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
           />
+          {this.state.osmData
+            .filter((entry) => entry.type === "node" && entry.lat && entry.tags)
+            .map((entry, idx) => (
+              <Marker key={`marker-${idx}`} position={[entry.lat, entry.lon]}>
+                <Popup>
+                  <span>{entry.tags.name}</span>
+                </Popup>
+              </Marker>
+            ))}
+          {this.state.osmData
+            .filter((entry) => entry.type === "way" && entry.lat && entry.tags)
+            .map((entry, idx) => (
+              <Marker
+                key={`marker-${idx}`}
+                position={[entry.center.lat, entry.center.lon]}
+              >
+                <Popup>
+                  <span>{entry.tags.name}</span>
+                </Popup>
+              </Marker>
+            ))}
         </Map>
       </div>
     );
