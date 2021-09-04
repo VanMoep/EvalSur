@@ -1,5 +1,5 @@
 import React from "react";
-import { Map, TileLayer } from "react-leaflet";
+import { Map, TileLayer, LayersControl } from "react-leaflet";
 import L from "leaflet";
 import "./App.css";
 import "leaflet/dist/leaflet.css";
@@ -82,29 +82,29 @@ class App extends React.Component {
   }
 
   getTypeByTags(tags) {
-    if (tags.hasOwnProperty("shop") && tags.shop == "bakery")
+    if (tags.hasOwnProperty("shop") && tags.shop === "bakery")
       return "bakery"
-    else if (tags.hasOwnProperty("shop") && tags.shop == "supermarket")
+    else if (tags.hasOwnProperty("shop") && tags.shop === "supermarket")
       return "supermarket"
-    else if (tags.hasOwnProperty("shop") && tags.shop == "chemist")
+    else if (tags.hasOwnProperty("shop") && tags.shop === "chemist")
       return "chemist"
-    else if (tags.hasOwnProperty("amenity") && tags.amenity == "cinema")
+    else if (tags.hasOwnProperty("amenity") && tags.amenity === "cinema")
       return "cinema"
-    else if (tags.hasOwnProperty("sport") && tags.sport == "swimming")
+    else if (tags.hasOwnProperty("sport") && tags.sport === "swimming")
       return "swimming"
-    else if (tags.hasOwnProperty("amenity") && tags.amenity == "pharmacy")
+    else if (tags.hasOwnProperty("amenity") && tags.amenity === "pharmacy")
       return "pharmacy"
-    else if (tags.hasOwnProperty("amenity") && tags.amenity == "ice_cream")
+    else if (tags.hasOwnProperty("amenity") && tags.amenity === "ice_cream")
       return "ice_cream"
-    else if (tags.hasOwnProperty("amenity") && tags.amenity == "school")
+    else if (tags.hasOwnProperty("amenity") && tags.amenity === "school")
       return "school"
-    else if (tags.hasOwnProperty("amenity") && tags.amenity == "college")
+    else if (tags.hasOwnProperty("amenity") && tags.amenity === "college")
       return "college"
-    else if (tags.hasOwnProperty("amenity") && tags.amenity == "kindergarten")
+    else if (tags.hasOwnProperty("amenity") && tags.amenity === "kindergarten")
       return "kindergarten"
-    else if (tags.hasOwnProperty("leisure") && tags.leisure == "park")
+    else if (tags.hasOwnProperty("leisure") && tags.leisure === "park")
       return "park"
-    else if (tags.hasOwnProperty("leisure") && tags.amenity == "playground")
+    else if (tags.hasOwnProperty("leisure") && tags.amenity === "playground")
       return "playground"
     return "unknown";
   }
@@ -137,11 +137,23 @@ class App extends React.Component {
           center={this.state.defaultCenter}
           zoom={this.state.defaultZoom}
         >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> 
+          <LayersControl position="topright">
+            <LayersControl.BaseLayer checked name="OpenStreetMap.Mapnik">
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> 
             Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
-          />
+              />
+            </LayersControl.BaseLayer>
+            <LayersControl.BaseLayer checked name="OpenStreetMap.Mapnik">
+              <TileLayer
+                url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}"
+                attribution='Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                subdomains='abcd'
+                ext='png'
+              />
+            </LayersControl.BaseLayer>
+          </LayersControl>
           <Markers osmData={this.state.osmData} />
           <Control position="bottomleft" >
             <Bar osmData={this.state.osmDataCounted} />
