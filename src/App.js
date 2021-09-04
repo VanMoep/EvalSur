@@ -7,6 +7,8 @@ import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen.js";
 import "leaflet-easybutton/src/easy-button";
 import Markers from "./Markers"
+import Bar from "./Bar"
+import Control from 'react-leaflet-control';
 
 class App extends React.Component {
   leafletMap = null;
@@ -18,15 +20,17 @@ class App extends React.Component {
       defaultCenter: [0, 9],
       osmRequest: null,
       defaultRange: 1500,
-      osmData: []
+      osmData: [],
+      osmDataCounted: {}
     };
-    this.getIcons = this.getIcons.bind(this);
+    this.loadOSMData = this.loadOSMData.bind(this);
+    this.getTypeByTags = this.getTypeByTags.bind(this);
   }
 
   setLeafletMapRef = (map) => (this.leafletMap = map && map.leafletElement);
 
 
-  getIcons() {
+  loadOSMData() {
     //clear old map
 
     // get new data
@@ -42,7 +46,29 @@ class App extends React.Component {
     );
     queryOverpass(requestBody)
       .then((response) => {
-        this.setState({ osmData: response });
+        // enhance the osm Response
+        const parsedEntries = [];
+        const entryMapCount = {};
+        response
+          .filter((entry) => (entry.type === "node" || entry.type === "way") && entry.lat && entry.tags)
+          .map((entry, idx) => {
+            const tag = this.getTypeByTags(entry.tags);
+            parsedEntries.push({
+              name: entry.tags.name,
+              lat: (entry.type === "node") ? entry.lat : entry.center.lat,
+              lon: (entry.type === "node") ? entry.lon : entry.center.lon,
+              type: tag
+            })
+            if (entryMapCount.hasOwnProperty(tag)) {
+              entryMapCount[tag] = entryMapCount[tag] + 1;
+            } else {
+              entryMapCount[tag] = 1;
+            }
+          });
+        this.setState({
+          osmData: parsedEntries,
+          osmDataCounted: entryMapCount
+        });
       })
       .catch(console.error);
 
@@ -53,6 +79,34 @@ class App extends React.Component {
         }
       })
     */
+  }
+
+  getTypeByTags(tags) {
+    if (tags.hasOwnProperty("shop") && tags.shop == "bakery")
+      return "bakery"
+    else if (tags.hasOwnProperty("shop") && tags.shop == "supermarket")
+      return "supermarket"
+    else if (tags.hasOwnProperty("shop") && tags.shop == "chemist")
+      return "chemist"
+    else if (tags.hasOwnProperty("amenity") && tags.amenity == "cinema")
+      return "cinema"
+    else if (tags.hasOwnProperty("sport") && tags.sport == "swimming")
+      return "swimming"
+    else if (tags.hasOwnProperty("amenity") && tags.amenity == "pharmacy")
+      return "pharmacy"
+    else if (tags.hasOwnProperty("amenity") && tags.amenity == "ice_cream")
+      return "ice_cream"
+    else if (tags.hasOwnProperty("amenity") && tags.amenity == "school")
+      return "school"
+    else if (tags.hasOwnProperty("amenity") && tags.amenity == "college")
+      return "college"
+    else if (tags.hasOwnProperty("amenity") && tags.amenity == "kindergarten")
+      return "kindergarten"
+    else if (tags.hasOwnProperty("leisure") && tags.leisure == "park")
+      return "park"
+    else if (tags.hasOwnProperty("leisure") && tags.amenity == "playground")
+      return "playground"
+    return "unknown";
   }
 
   componentDidMount() {
@@ -70,7 +124,7 @@ class App extends React.Component {
       });
     }).addTo(this.leafletMap);
     L.easyButton('<span class="download">	&DownArrowBar;</span>', () =>
-      this.getIcons()
+      this.loadOSMData()
     ).addTo(this.leafletMap);
   }
 
@@ -89,7 +143,11 @@ class App extends React.Component {
             Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
           />
           <Markers osmData={this.state.osmData} />
+          <Control position="bottomleft" >
+            <Bar osmData={this.state.osmDataCounted} />
+          </Control>
         </Map>
+
       </div>
     );
   }

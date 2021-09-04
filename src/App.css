@@ -17,6 +17,11 @@
   }
 }
 
+.Bar {
+  position: relative;
+  z-index: 100000;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
