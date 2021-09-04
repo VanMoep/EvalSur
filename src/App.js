@@ -1,11 +1,12 @@
-import React, { useRef, useEffect } from "react";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import React from "react";
+import { Map, TileLayer } from "react-leaflet";
 import L from "leaflet";
 import "./App.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen.js";
 import "leaflet-easybutton/src/easy-button";
+import Markers from "./Markers"
 
 class App extends React.Component {
   leafletMap = null;
@@ -23,6 +24,7 @@ class App extends React.Component {
   }
 
   setLeafletMapRef = (map) => (this.leafletMap = map && map.leafletElement);
+
 
   getIcons() {
     //clear old map
@@ -86,27 +88,7 @@ class App extends React.Component {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> 
             Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
           />
-          {this.state.osmData
-            .filter((entry) => entry.type === "node" && entry.lat && entry.tags)
-            .map((entry, idx) => (
-              <Marker key={`marker-${idx}`} position={[entry.lat, entry.lon]}>
-                <Popup>
-                  <span>{entry.tags.name}</span>
-                </Popup>
-              </Marker>
-            ))}
-          {this.state.osmData
-            .filter((entry) => entry.type === "way" && entry.lat && entry.tags)
-            .map((entry, idx) => (
-              <Marker
-                key={`marker-${idx}`}
-                position={[entry.center.lat, entry.center.lon]}
-              >
-                <Popup>
-                  <span>{entry.tags.name}</span>
-                </Popup>
-              </Marker>
-            ))}
+          <Markers osmData={this.state.osmData} />
         </Map>
       </div>
     );
