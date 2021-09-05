@@ -12,7 +12,6 @@ import Control from 'react-leaflet-control';
 
 class App extends React.Component {
   leafletMap = null;
-
   constructor() {
     super();
     this.state = {
@@ -21,7 +20,8 @@ class App extends React.Component {
       osmRequest: null,
       defaultRange: 1500,
       osmData: [],
-      osmDataCounted: {}
+      osmDataCounted: {},
+      loading: false
     };
     this.loadOSMData = this.loadOSMData.bind(this);
     this.getTypeByTags = this.getTypeByTags.bind(this);
@@ -31,8 +31,11 @@ class App extends React.Component {
 
 
   loadOSMData() {
-    //clear old map
-
+    //clear old map   
+    this.setState({
+      loading: true,
+      osmError: null
+    });
     // get new data
     const queryOverpass = require("@derhuerst/query-overpass");
     var requestBody = this.state.osmRequest;
@@ -42,7 +45,8 @@ class App extends React.Component {
       .replaceAll("<LON>", this.leafletMap.getCenter().lng);
     console.log(
       "requesting OSM data for position",
-      this.leafletMap.getCenter()
+      this.leafletMap.getCenter(),
+      requestBody
     );
     queryOverpass(requestBody)
       .then((response) => {
@@ -67,10 +71,17 @@ class App extends React.Component {
           });
         this.setState({
           osmData: parsedEntries,
-          osmDataCounted: entryMapCount
+          osmDataCounted: entryMapCount,
+          loading: false,
+          osmError: null
         });
       })
-      .catch(console.error);
+      .catch((error) => {
+        this.setState({
+          loading: false,
+          osmError: error
+        });
+      });
 
     /*
      this.state.osmData.forEach(entry =>{
@@ -115,8 +126,11 @@ class App extends React.Component {
         defaultCenter: [position.coords.latitude, position.coords.longitude]
       });
     });
-    fetch("././overpassQL.txt").then((res) =>
-      res.text().then((text) => this.setState({ osmRequest: text }))
+    fetch("data/overpassQL.txt").then((res) =>
+      res.text().then((text) => {
+        console.log(text);
+        this.setState({ osmRequest: text });
+      })
     );
     L.easyButton('<span class="target">	&target;</span>', function (btn, map) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -141,33 +155,32 @@ class App extends React.Component {
             <LayersControl.BaseLayer checked name="CartoDB.VoyagerLabelsUnder">
               <TileLayer
                 url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png'
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a> | Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
               />
             </LayersControl.BaseLayer>
             <LayersControl.BaseLayer checked name="CartoDB.Positron">
               <TileLayer
                 url='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a> | Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
                 subdomains='abcd'
               />
             </LayersControl.BaseLayer>
             <LayersControl.BaseLayer name="OpenStreetMap.BZH">
               <TileLayer
                 url="https://tile.openstreetmap.bzh/br/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles courtesy of <a href="http://www.openstreetmap.bzh/" target="_blank">Breton OpenStreetMap Team</a> Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles courtesy of <a href="http://www.openstreetmap.bzh/" target="_blank">Breton OpenStreetMap Team</a> | Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
               />
             </LayersControl.BaseLayer>
             <LayersControl.BaseLayer name="OpenStreetMap.Mapnik">
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> 
-            Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
               />
             </LayersControl.BaseLayer>
             <LayersControl.BaseLayer name="Stamen.Toner">
               <TileLayer
                 url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}"
-                attribution='Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
+                attribution='Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
                 subdomains='abcd'
                 ext='png'
               />
@@ -175,23 +188,22 @@ class App extends React.Component {
             <LayersControl.BaseLayer name="Stadia.AlidadeSmooth">
               <TileLayer
                 url='https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png'
-                attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+                attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors | Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
               />
             </LayersControl.BaseLayer>
             <LayersControl.BaseLayer name="Stadia.AlidadeSmoothDark">
               <TileLayer
                 url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-                attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+                attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors | Data mining by [<a href="http://overpass-api.de/">Overpass API</a>]'
               />
             </LayersControl.BaseLayer>
           </LayersControl>
           <Markers osmData={this.state.osmData} />
           <Control position="bottomleft" >
-            <Bar osmData={this.state.osmDataCounted} />
+            <Bar osmData={this.state.osmDataCounted} loading={this.state.loading} osmError={this.state.osmError} />
           </Control>
         </Map>
-
-      </div >
+      </div>
     );
   }
 }
