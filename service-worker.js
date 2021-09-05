@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/EvalSur/precache-manifest.b32088e9de059254e5df6f389762c9aa.js"
+  "/EvalSur/precache-manifest.1572050014d52fb56ab0cd25d6e7db6e.js"
 );
 
 self.addEventListener('message', (event) => {
