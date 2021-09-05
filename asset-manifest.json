@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/EvalSur/static/css/main.52e75b73.chunk.css",
+    "main.js": "/EvalSur/static/js/main.d5286c72.chunk.js",
+    "main.js.map": "/EvalSur/static/js/main.d5286c72.chunk.js.map",
+    "runtime-main.js": "/EvalSur/static/js/runtime-main.3d77540c.js",
+    "runtime-main.js.map": "/EvalSur/static/js/runtime-main.3d77540c.js.map",
+    "static/css/2.b06da25b.chunk.css": "/EvalSur/static/css/2.b06da25b.chunk.css",
+    "static/js/2.b2e11155.chunk.js": "/EvalSur/static/js/2.b2e11155.chunk.js",
+    "static/js/2.b2e11155.chunk.js.map": "/EvalSur/static/js/2.b2e11155.chunk.js.map",
+    "index.html": "/EvalSur/index.html",
+    "precache-manifest.3fa3cb9f5a0ad52f6587ed415342a4b0.js": "/EvalSur/precache-manifest.3fa3cb9f5a0ad52f6587ed415342a4b0.js",
+    "service-worker.js": "/EvalSur/service-worker.js",
+    "static/css/2.b06da25b.chunk.css.map": "/EvalSur/static/css/2.b06da25b.chunk.css.map",
+    "static/css/main.52e75b73.chunk.css.map": "/EvalSur/static/css/main.52e75b73.chunk.css.map",
+    "static/js/2.b2e11155.chunk.js.LICENSE.txt": "/EvalSur/static/js/2.b2e11155.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3d77540c.js",
+    "static/css/2.b06da25b.chunk.css",
+    "static/js/2.b2e11155.chunk.js",
+    "static/css/main.52e75b73.chunk.css",
+    "static/js/main.d5286c72.chunk.js"
+  ]
+}
