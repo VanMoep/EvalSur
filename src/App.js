@@ -117,7 +117,7 @@ class App extends React.Component {
       return "kindergarten"
     else if (tags.hasOwnProperty("leisure") && tags.leisure === "park")
       return "park"
-    else if (tags.hasOwnProperty("leisure") && tags.amenity === "playground")
+    else if (tags.hasOwnProperty("leisure") && tags.leisure === "playground")
       return "playground"
     return "unknown";
   }
