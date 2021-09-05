@@ -5,10 +5,12 @@ import "./App.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen.js";
-import "leaflet-easybutton/src/easy-button";
 import Markers from "./Markers"
 import Bar from "./Bar"
 import Control from 'react-leaflet-control';
+import GpsNotFixedIcon from '@material-ui/icons/GpsNotFixed';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
+import Fab from '@material-ui/core/Fab';
 
 class App extends React.Component {
   leafletMap = null;
@@ -132,14 +134,6 @@ class App extends React.Component {
         this.setState({ osmRequest: text });
       })
     );
-    L.easyButton('<span class="target">	&target;</span>', function (btn, map) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        map.setView([position.coords.latitude, position.coords.longitude]);
-      });
-    }).addTo(this.leafletMap);
-    L.easyButton('<span class="download">	&DownArrowBar;</span>', () =>
-      this.loadOSMData()
-    ).addTo(this.leafletMap);
   }
 
   render() {
@@ -199,6 +193,18 @@ class App extends React.Component {
             </LayersControl.BaseLayer>
           </LayersControl>
           <Markers osmData={this.state.osmData} />
+          <Control position="topleft" >
+            <Fab size="small" onClick={() => {
+              navigator.geolocation.getCurrentPosition((position) => {
+                this.leafletMap.setView([position.coords.latitude, position.coords.longitude]);
+              });
+            }}>
+              <GpsNotFixedIcon />
+            </Fab>
+          </Control>
+          <Control position="topleft" >
+            <Fab size="small" onClick={() => { this.loadOSMData() }}><AutorenewIcon /></Fab >
+          </Control>
           <Control position="bottomleft" >
             <Bar osmData={this.state.osmDataCounted} loading={this.state.loading} osmError={this.state.osmError} />
           </Control>
