@@ -3,10 +3,9 @@ import Badge from '@material-ui/core/Badge';
 import Paper from '@material-ui/core/Paper';
 import { tagIconMapper, tagColorMapper } from './Mapping'
 import Tooltip from '@material-ui/core/Tooltip';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import ErrorIcon from '@material-ui/icons/Error';
-import Grid from '@material-ui/core/Grid';
-import { Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import CachedIcon from '@material-ui/icons/Cached';
 
 class Bar extends React.Component {
 
@@ -17,7 +16,16 @@ class Bar extends React.Component {
         if (this.props.loading) {
             return (
                 <Paper style={{ padding: "10px" }}>
-                    <LinearProgress />
+                    <Grid container spacing={3}>
+                        <Grid item xs={2}>
+                            <CachedIcon />
+                        </Grid>
+                        <Grid item xs={10}>
+                            <Typography align="center">
+                                loading OSM data
+                            </Typography>
+                        </Grid>
+                    </Grid>
                 </Paper  >
             );
         } else {

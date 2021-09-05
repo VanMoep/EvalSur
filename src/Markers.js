@@ -25,8 +25,8 @@ class Markers extends React.Component {
                     .map((entry, idx) => (
                         <Marker key={`marker-${idx}`} position={[entry.lat, entry.lon]} icon={this.getIconForType(entry.type)}>
                             <Popup>
+                                <span>{entry.type}</span>:
                                 <span>{entry.name}</span>
-                                <span>{entry.type}</span>
                             </Popup>
                         </Marker>
                     ))}
