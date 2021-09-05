@@ -15,7 +15,7 @@ class Bar extends React.Component {
     render() {
         if (this.props.loading) {
             return (
-                <Paper style={{ padding: "10px" }}>
+                <Paper style={{ padding: "5px" }}>
                     <Grid container spacing={3}>
                         <Grid item xs={2}>
                             <CachedIcon />
@@ -44,7 +44,7 @@ class Bar extends React.Component {
                 );
             else if (this.props.osmError) {
                 return (
-                    <Paper style={{ padding: "10px" }}>
+                    <Paper style={{ padding: "5px" }}>
                         <Grid container spacing={3}>
                             <Grid item xs={2}>
                                 <ErrorIcon color="error" />
