@@ -9,6 +9,7 @@ import LocalMoviesIcon from '@material-ui/icons/LocalMovies';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import ChildCareIcon from '@material-ui/icons/ChildCare';
 import ApartmentIcon from '@material-ui/icons/Apartment';
+import CategoryIcon from '@material-ui/icons/Category';
 import PoolIcon from '@material-ui/icons/Pool';
 import CakeIcon from '@material-ui/icons/Cake';
 import TurnedInIcon from '@material-ui/icons/TurnedIn';
@@ -22,6 +23,7 @@ import grey from '@material-ui/core/colors/grey';
 import brown from '@material-ui/core/colors/brown';
 import cyan from '@material-ui/core/colors/cyan';
 import pink from '@material-ui/core/colors/pink';
+import teal from '@material-ui/core/colors/teal';
 
 const tagIconMapper = function (tag) {
     switch (tag) {
@@ -61,6 +63,11 @@ const tagIconMapper = function (tag) {
                 margin: "2px"
             }} />;
         case "playground":
+            return <CategoryIcon style={{
+                color: tagColorMapper(tag),
+                margin: "2px"
+            }} />;
+        case "park":
             return <LocalFloristIcon style={{
                 color: tagColorMapper(tag),
                 margin: "2px"
@@ -99,6 +106,8 @@ const tagColorMapper = function (tag) {
         case "cinema":
             return purple[500];
         case "playground":
+            return teal[500];
+        case "park":
             return green[500];
         case "pharmacy":
             return red[500];
