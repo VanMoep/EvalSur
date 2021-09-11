@@ -12,7 +12,7 @@ class Markers extends React.Component {
     }
 
     getIconForType(type) {
-        return L.divIcon({
+        return L.divIcon({//TODO: set iconAnchor
             className: 'custom-icon',
             html: ReactDOMServer.renderToString(tagIconMapper(type))
         });
@@ -31,10 +31,11 @@ class Markers extends React.Component {
                         </Marker>
                     ))}
                 <Circle
-                    center={{ lat: this.props.center[0], lng: this.props.center[1] }}
+                    center={{ lat: this.props.searchCenter[0], lng: this.props.searchCenter[1] }}
                     fillColor="blue"
                     radius={this.props.radius} />
-                <Marker key={`marker-position`} position={[this.props.center[0], this.props.center[1]]} icon={this.getIconForType("position")} />
+                <Marker key={`marker-searchCenter`} position={[this.props.searchCenter[0], this.props.searchCenter[1]]} icon={this.getIconForType("position")} />
+                <Marker key={`marker-mapCenter`} position={[this.props.mapCenter[0], this.props.mapCenter[1]]} icon={this.getIconForType("center")} />
             </React.Fragment>
         );
     }

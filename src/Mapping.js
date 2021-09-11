@@ -26,11 +26,16 @@ import cyan from '@material-ui/core/colors/cyan';
 import pink from '@material-ui/core/colors/pink';
 import blue from '@material-ui/core/colors/blue';
 import teal from '@material-ui/core/colors/teal';
+import CodeIcon from '@material-ui/icons/Code';
 
 const tagIconMapper = function (tag) {
     switch (tag) {
         case "position":
             return <AddIcon style={{
+                color: tagColorMapper(tag)
+            }} />;
+        case "center":
+            return <CodeIcon style={{
                 color: tagColorMapper(tag)
             }} />;
         case "bakery":
@@ -104,6 +109,8 @@ const tagIconMapper = function (tag) {
 const tagColorMapper = function (tag) {
     switch (tag) {
         case "position":
+            return blue[500];
+        case "center":
             return blue[500];
         case "bakery":
             return amber[500];
