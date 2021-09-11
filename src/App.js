@@ -225,7 +225,7 @@ class App extends React.Component {
               />
             </LayersControl.BaseLayer>
           </LayersControl>
-          <Markers osmData={this.state.osmData} />
+          <Markers osmData={this.state.osmData} center={this.state.defaultCenter} radius={this.state.defaultRange} />
           <Control position="topleft" >
             <Fab size="small" onClick={() => {
               navigator.geolocation.getCurrentPosition((position) => {

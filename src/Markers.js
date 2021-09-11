@@ -1,5 +1,5 @@
 import React from "react";
-import { Marker, Popup } from "react-leaflet";
+import { Marker, Popup, Circle } from "react-leaflet";
 import L from "leaflet";
 import ReactDOMServer from 'react-dom/server';
 import { tagIconMapper } from './Mapping.js'
@@ -30,6 +30,11 @@ class Markers extends React.Component {
                             </Popup>
                         </Marker>
                     ))}
+                <Circle
+                    center={{ lat: this.props.center[0], lng: this.props.center[1] }}
+                    fillColor="blue"
+                    radius={this.props.radius} />
+                <Marker key={`marker-position`} position={[this.props.center[0], this.props.center[1]]} icon={this.getIconForType("position")} />
             </React.Fragment>
         );
     }

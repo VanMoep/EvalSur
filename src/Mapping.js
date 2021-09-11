@@ -1,6 +1,7 @@
 
 import React from "react";
 import RestaurantIcon from '@material-ui/icons/Restaurant';
+import AddIcon from '@material-ui/icons/Add';
 import SchoolIcon from '@material-ui/icons/School';
 import LocalPharmacyIcon from '@material-ui/icons/LocalPharmacy';
 import LocalGroceryStoreIcon from '@material-ui/icons/LocalGroceryStore';
@@ -23,10 +24,15 @@ import grey from '@material-ui/core/colors/grey';
 import brown from '@material-ui/core/colors/brown';
 import cyan from '@material-ui/core/colors/cyan';
 import pink from '@material-ui/core/colors/pink';
+import blue from '@material-ui/core/colors/blue';
 import teal from '@material-ui/core/colors/teal';
 
 const tagIconMapper = function (tag) {
     switch (tag) {
+        case "position":
+            return <AddIcon style={{
+                color: tagColorMapper(tag)
+            }} />;
         case "bakery":
             return <CakeIcon style={{
                 color: tagColorMapper(tag),
@@ -97,6 +103,8 @@ const tagIconMapper = function (tag) {
 
 const tagColorMapper = function (tag) {
     switch (tag) {
+        case "position":
+            return blue[500];
         case "bakery":
             return amber[500];
         case "supermarket":
