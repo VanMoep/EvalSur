@@ -82,7 +82,8 @@ class App extends React.Component {
           osmData: parsedEntries,
           osmDataCounted: entryMapCount,
           loading: false,
-          osmError: null
+          osmError: null,
+          defaultCenter: [this.leafletMap.getCenter().lat, this.leafletMap.getCenter().lng]
         });
       })
       .catch((error) => {
