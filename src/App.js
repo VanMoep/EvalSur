@@ -11,9 +11,16 @@ import Control from 'react-leaflet-control';
 import GpsNotFixedIcon from '@material-ui/icons/GpsNotFixed';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import Fab from '@material-ui/core/Fab';
+import Popup from 'reactjs-popup';
+import Grid from '@material-ui/core/Grid';
+import Slider from '@material-ui/core/Slider';
+import Typography from '@material-ui/core/Typography';
+import 'reactjs-popup/dist/index.css';
+import Button from '@material-ui/core/Button';
 
 class App extends React.Component {
   leafletMap = null;
+
   constructor() {
     super();
     this.state = {
@@ -27,10 +34,10 @@ class App extends React.Component {
     };
     this.loadOSMData = this.loadOSMData.bind(this);
     this.getTypeByTags = this.getTypeByTags.bind(this);
+    this.handleRangeChange = this.handleRangeChange.bind(this);
   }
 
   setLeafletMapRef = (map) => (this.leafletMap = map && map.leafletElement);
-
 
   loadOSMData() {
     //clear old map   
@@ -136,7 +143,33 @@ class App extends React.Component {
     );
   }
 
+  handleRangeChange(event, value) {
+    this.setState({
+      defaultRange: value
+    });
+  }
+
+
+  valuetext(value) {
+    return `${value}km`;
+  }
+
   render() {
+    const marks = [
+      {
+        value: 500,
+        label: '0.5 km',
+      },
+      {
+        value: 1500,
+        label: '1.5 km',
+      },
+      {
+        value: 3000,
+        label: '3 km',
+      }
+    ];
+
     return (
       <div className="App">
         <Map
@@ -203,7 +236,44 @@ class App extends React.Component {
             </Fab>
           </Control>
           <Control position="topleft" >
-            <Fab size="small" onClick={() => { this.loadOSMData() }}><AutorenewIcon /></Fab >
+            <Popup
+              trigger={<Fab size="small"><AutorenewIcon /></Fab >}
+              modal
+              nested
+            >
+              {close => (
+                <div className="modal">
+                  <button className="close" onClick={close}>
+                    &times;
+                  </button>
+                  <div className="header"> select search radius </div>
+                  <div className="content">
+                    {' '}
+                    <Grid container spacing={2}>
+                      <Grid item>
+                      </Grid>
+                      <Grid item xs>
+                        <Typography id="discrete-slider-always" gutterBottom>
+                        </Typography>
+                        <Slider value={this.state.defaultRange} onChange={this.handleRangeChange}
+                          aria-labelledby="discrete-slider-always" step={500} defaultValue={1500} min={500} max={3000}
+                          marks={marks} getAriaValueText={this.valuetext} valueLabelDisplay="on" />
+                      </Grid>
+                      <Grid item>
+                      </Grid>
+                    </Grid>
+                  </div>
+                  <div className="actions">
+                    <Button variant="contained" color="primary"
+                      onClick={() => {
+                        this.loadOSMData();
+                        close();
+                      }}
+                    >load</Button>
+                  </div>
+                </div>
+              )}
+            </Popup>
           </Control>
           <Control position="bottomleft" >
             <Bar osmData={this.state.osmDataCounted} loading={this.state.loading} osmError={this.state.osmError} />
