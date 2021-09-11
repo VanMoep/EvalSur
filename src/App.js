@@ -35,7 +35,7 @@ class App extends React.Component {
     this.loadOSMData = this.loadOSMData.bind(this);
     this.getTypeByTags = this.getTypeByTags.bind(this);
     this.handleRangeChange = this.handleRangeChange.bind(this);
-    this.handleMoveEnd = this.handleMoveEnd.bind(this);
+    this.handleMove = this.handleMove.bind(this);
   }
 
   setLeafletMapRef = (map) => (this.leafletMap = map && map.leafletElement);
@@ -151,7 +151,7 @@ class App extends React.Component {
     });
   }
 
-  handleMoveEnd(e) {
+  handleMove(e) {
     this.setState({
       mapCenter: [e.target.getCenter().lat, e.target.getCenter().lng]
     });
@@ -185,7 +185,7 @@ class App extends React.Component {
           fullscreenControl={true}
           center={this.state.defaultCenter}
           zoom={this.state.defaultZoom}
-          onMoveEnd={this.handleMoveEnd}
+          onMove={this.handleMove}
         >
           <LayersControl position="topright">
             <LayersControl.BaseLayer checked name="CartoDB.VoyagerLabelsUnder">
