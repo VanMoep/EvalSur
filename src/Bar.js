@@ -1,13 +1,9 @@
 import React from "react";
-import Badge from '@material-ui/core/Badge';
 import Paper from '@material-ui/core/Paper';
-import { tagIconMapper, tagColorMapper } from './Mapping'
-import Tooltip from '@material-ui/core/Tooltip';
 import ErrorIcon from '@material-ui/icons/Error';
 import { Grid, Typography } from '@material-ui/core';
 import CachedIcon from '@material-ui/icons/Cached';
-import Popup from 'reactjs-popup';
-import OSMList from "./OSMList"
+import ResultListDialog from "./ResultListDialog"
 
 class Bar extends React.Component {
 
@@ -37,36 +33,7 @@ class Bar extends React.Component {
         } else {
             if ((Object.getOwnPropertyNames(this.props.osmDataCounted).length > 0))
                 return (
-                    <Popup contentStyle={contentStyle}
-                        trigger={
-                            <Paper style={{ padding: "10px" }}>
-                                {Object.keys(this.props.osmDataCounted)
-                                    .map((key) => (
-                                        <Tooltip title={key} aria-label={key}>
-                                            <Badge badgeContent={this.props.osmDataCounted[key]} style={{ color: tagColorMapper(key) }}>
-                                                {tagIconMapper(key)}
-                                            </Badge>
-                                        </Tooltip>
-                                    ))}
-                            </Paper  >
-                        }
-                        modal
-                        nested
-                    >
-                        {close => (
-                            <div className="modal" fullscreen={true} scrollable={true}>
-                                <button className="close" onClick={close}>
-                                    &times;
-                                </button>
-                                <div className="header"> POIs within range of {this.props.range}m </div>
-                                <div className="content">
-                                    {' '}
-                                    <OSMList osmData={this.props.osmData} />
-                                </div>
-                            </div>
-                        )}
-                    </Popup>
-
+                    <ResultListDialog osmDataCounted={this.props.osmDataCounted} osmData={this.props.osmData} range={this.props.range} />
                 );
             else if (this.props.osmError) {
                 return (

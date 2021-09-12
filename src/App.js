@@ -84,7 +84,16 @@ class App extends React.Component {
           name: entry.tags.name,
           lat: (entry.type === "node") ? entry.lat : entry.center.lat,
           lon: (entry.type === "node") ? entry.lon : entry.center.lon,
-          type: tag
+          type: tag,
+          address: {
+            city: entry.tags["addr:city"],
+            housenumber: entry.tags["addr:housenumber"],
+            postcode: entry.tags["addr:postcode"],
+            street: entry.tags["addr:street"]
+          },
+          openingHours: entry.tags["opening_hours"],
+          website: entry.tags.website,
+          phone: entry.tags.phone
         })
         if (entryMapCount.hasOwnProperty(tag)) {
           entryMapCount[tag] = entryMapCount[tag] + 1;

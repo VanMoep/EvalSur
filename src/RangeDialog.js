@@ -11,7 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 
-export default function AlertDialog({
+export default function RangeDialog({
     defaultRange,
     handleRangeChange,
     loadOSMData
