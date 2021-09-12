@@ -12,11 +12,11 @@ import GpsNotFixedIcon from '@material-ui/icons/GpsNotFixed';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import Fab from '@material-ui/core/Fab';
 import Popup from 'reactjs-popup';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import 'reactjs-popup/dist/index.css';
-import Button from '@material-ui/core/Button';
 
 class App extends React.Component {
   leafletMap = null;
@@ -36,6 +36,7 @@ class App extends React.Component {
     this.getTypeByTags = this.getTypeByTags.bind(this);
     this.handleRangeChange = this.handleRangeChange.bind(this);
     this.handleMove = this.handleMove.bind(this);
+    this.handleOSMResponse = this.handleOSMResponse.bind(this);
   }
 
   setLeafletMapRef = (map) => (this.leafletMap = map && map.leafletElement);
@@ -60,32 +61,7 @@ class App extends React.Component {
     );
     queryOverpass(requestBody)
       .then((response) => {
-        // enhance the osm Response
-        const parsedEntries = [];
-        const entryMapCount = {};
-        response
-          .filter((entry) => (entry.type === "node" || entry.type === "way") && entry.lat && entry.tags)
-          .map((entry, idx) => {
-            const tag = this.getTypeByTags(entry.tags);
-            parsedEntries.push({
-              name: entry.tags.name,
-              lat: (entry.type === "node") ? entry.lat : entry.center.lat,
-              lon: (entry.type === "node") ? entry.lon : entry.center.lon,
-              type: tag
-            })
-            if (entryMapCount.hasOwnProperty(tag)) {
-              entryMapCount[tag] = entryMapCount[tag] + 1;
-            } else {
-              entryMapCount[tag] = 1;
-            }
-          });
-        this.setState({
-          osmData: parsedEntries,
-          osmDataCounted: entryMapCount,
-          loading: false,
-          osmError: null,
-          defaultCenter: [this.leafletMap.getCenter().lat, this.leafletMap.getCenter().lng]
-        });
+        this.handleOSMResponse(response);
       })
       .catch((error) => {
         this.setState({
@@ -93,14 +69,35 @@ class App extends React.Component {
           osmError: error
         });
       });
+  }
 
-    /*
-     this.state.osmData.forEach(entry =>{
-        if(entry.tags&&entry.tags.name){
-          console.log(entry.tags.name, entry);
+  handleOSMResponse(response) {
+    // enhance the osm Response
+    const parsedEntries = [];
+    const entryMapCount = {};
+    response
+      .filter((entry) => (entry.type === "node" || entry.type === "way") && entry.lat && entry.tags)
+      .map((entry, idx) => {
+        const tag = this.getTypeByTags(entry.tags);
+        parsedEntries.push({
+          name: entry.tags.name,
+          lat: (entry.type === "node") ? entry.lat : entry.center.lat,
+          lon: (entry.type === "node") ? entry.lon : entry.center.lon,
+          type: tag
+        })
+        if (entryMapCount.hasOwnProperty(tag)) {
+          entryMapCount[tag] = entryMapCount[tag] + 1;
+        } else {
+          entryMapCount[tag] = 1;
         }
-      })
-    */
+      });
+    this.setState({
+      osmData: parsedEntries,
+      osmDataCounted: entryMapCount,
+      loading: false,
+      osmError: null,
+      defaultCenter: [this.leafletMap.getCenter().lat, this.leafletMap.getCenter().lng]
+    });
   }
 
   getTypeByTags(tags) {
@@ -137,9 +134,9 @@ class App extends React.Component {
         defaultCenter: [position.coords.latitude, position.coords.longitude]
       });
     });
-    fetch("data/overpassQL.txt").then((res) =>
+    fetch(process.env.PUBLIC_URL + "/data/overpassQL.txt", { mode: 'no-cors' }).then((res) =>
       res.text().then((text) => {
-        console.log(text);
+        console.log("request for osm", text);
         this.setState({ osmRequest: text });
       })
     );
@@ -285,7 +282,7 @@ class App extends React.Component {
             </Popup>
           </Control>
           <Control position="bottomleft" >
-            <Bar osmData={this.state.osmDataCounted} loading={this.state.loading} osmError={this.state.osmError} />
+            <Bar osmDataCounted={this.state.osmDataCounted} osmData={this.state.osmData} loading={this.state.loading} osmError={this.state.osmError} range={this.state.defaultRange} />
           </Control>
         </Map>
       </div>

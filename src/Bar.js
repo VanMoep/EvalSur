@@ -6,6 +6,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ErrorIcon from '@material-ui/icons/Error';
 import { Grid, Typography } from '@material-ui/core';
 import CachedIcon from '@material-ui/icons/Cached';
+import Popup from 'reactjs-popup';
+import Button from '@material-ui/core/Button';
+import OSMList from "./OSMList"
 
 class Bar extends React.Component {
 
@@ -13,6 +16,10 @@ class Bar extends React.Component {
         super(props);
     }
     render() {
+        const contentStyle = {
+            height: "90vh",
+            width: "100%"
+        };
         if (this.props.loading) {
             return (
                 <Paper style={{ padding: "5px" }}>
@@ -29,18 +36,38 @@ class Bar extends React.Component {
                 </Paper  >
             );
         } else {
-            if ((Object.getOwnPropertyNames(this.props.osmData).length > 0))
+            if ((Object.getOwnPropertyNames(this.props.osmDataCounted).length > 0))
                 return (
-                    <Paper style={{ padding: "10px" }}>
-                        {Object.keys(this.props.osmData)
-                            .map((key) => (
-                                <Tooltip title={key} aria-label={key}>
-                                    <Badge badgeContent={this.props.osmData[key]} style={{ color: tagColorMapper(key) }}>
-                                        {tagIconMapper(key)}
-                                    </Badge>
-                                </Tooltip>
-                            ))}
-                    </Paper  >
+                    <Popup contentStyle={contentStyle}
+                        trigger={
+                            <Paper style={{ padding: "10px" }}>
+                                {Object.keys(this.props.osmDataCounted)
+                                    .map((key) => (
+                                        <Tooltip title={key} aria-label={key}>
+                                            <Badge badgeContent={this.props.osmDataCounted[key]} style={{ color: tagColorMapper(key) }}>
+                                                {tagIconMapper(key)}
+                                            </Badge>
+                                        </Tooltip>
+                                    ))}
+                            </Paper  >
+                        }
+                        modal
+                        nested
+                    >
+                        {close => (
+                            <div className="modal" fullscreen={true} scrollable={true}>
+                                <button className="close" onClick={close}>
+                                    &times;
+                                </button>
+                                <div className="header"> POIs within range of {this.props.range}m </div>
+                                <div className="content">
+                                    {' '}
+                                    <OSMList osmData={this.props.osmData} />
+                                </div>
+                            </div>
+                        )}
+                    </Popup>
+
                 );
             else if (this.props.osmError) {
                 return (
