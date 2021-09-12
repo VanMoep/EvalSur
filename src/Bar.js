@@ -7,7 +7,6 @@ import ErrorIcon from '@material-ui/icons/Error';
 import { Grid, Typography } from '@material-ui/core';
 import CachedIcon from '@material-ui/icons/Cached';
 import Popup from 'reactjs-popup';
-import Button from '@material-ui/core/Button';
 import OSMList from "./OSMList"
 
 class Bar extends React.Component {

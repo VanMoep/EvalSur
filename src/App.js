@@ -17,6 +17,7 @@ import Grid from '@material-ui/core/Grid';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import 'reactjs-popup/dist/index.css';
+import RangeDialog from "./RangeDialog"
 
 class App extends React.Component {
   leafletMap = null;
@@ -154,27 +155,7 @@ class App extends React.Component {
     });
   }
 
-
-  valuetext(value) {
-    return `${value}km`;
-  }
-
   render() {
-    const marks = [
-      {
-        value: 500,
-        label: '0.5 km',
-      },
-      {
-        value: 1500,
-        label: '1.5 km',
-      },
-      {
-        value: 3000,
-        label: '3 km',
-      }
-    ];
-
     return (
       <div className="App">
         <Map
@@ -242,44 +223,7 @@ class App extends React.Component {
             </Fab>
           </Control>
           <Control position="topleft" >
-            <Popup
-              trigger={<Fab size="small"><AutorenewIcon /></Fab >}
-              modal
-              nested
-            >
-              {close => (
-                <div className="modal">
-                  <button className="close" onClick={close}>
-                    &times;
-                  </button>
-                  <div className="header"> select search radius </div>
-                  <div className="content">
-                    {' '}
-                    <Grid container spacing={2}>
-                      <Grid item>
-                      </Grid>
-                      <Grid item xs>
-                        <Typography id="discrete-slider-always" gutterBottom>
-                        </Typography>
-                        <Slider value={this.state.defaultRange} onChange={this.handleRangeChange}
-                          aria-labelledby="discrete-slider-always" step={500} defaultValue={1500} min={500} max={3000}
-                          marks={marks} getAriaValueText={this.valuetext} valueLabelDisplay="on" />
-                      </Grid>
-                      <Grid item>
-                      </Grid>
-                    </Grid>
-                  </div>
-                  <div className="actions">
-                    <Button variant="contained" color="primary"
-                      onClick={() => {
-                        this.loadOSMData();
-                        close();
-                      }}
-                    >load</Button>
-                  </div>
-                </div>
-              )}
-            </Popup>
+            <RangeDialog defaultRange={this.state.defaultRange} handleRangeChange={this.handleRangeChange} loadOSMData={this.loadOSMData} />
           </Control>
           <Control position="bottomleft" >
             <Bar osmDataCounted={this.state.osmDataCounted} osmData={this.state.osmData} loading={this.state.loading} osmError={this.state.osmError} range={this.state.defaultRange} />
