@@ -1,6 +1,6 @@
 # Evaluate your new living area
 
-You're looking for a new home and want a quick overview over the accessibility to bakerys, supermarkets, etc. within a walking range ? 
+You're looking for a new home and want a quick overview over the accessibility to bakerys, supermarkets, etc. within walking range ? 
 Here you are !
 
 ## Getting Started
