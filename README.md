@@ -1,6 +1,7 @@
-# Search for bakerys, supermarkets, etc. within a range to evaluate your new living area
+# Evaluate your new living area
 
-
+You're looking for a new home and want a quick overview over the accessibility to bakerys, supermarkets, etc. within a walking range ? 
+Here you are !
 
 ## Getting Started
 * Install dependencies
