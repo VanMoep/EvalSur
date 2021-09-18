@@ -46,7 +46,7 @@ export default function ResultListDialog({
       <Paper onClick={handleClickOpen} style={{ padding: "10px" }}>
         {Object.keys(osmDataCounted)
           .map((key) => (
-            <Tooltip title={key} aria-label={key}>
+            <Tooltip key={`tooltip-${key}`} title={key} aria-label={key}>
               <Badge badgeContent={osmDataCounted[key]} style={{ color: typeColorMapper(key) }}>
                 {typeIconMapper(key)}
               </Badge>
