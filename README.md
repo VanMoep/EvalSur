@@ -16,3 +16,9 @@ yarn start
 or
 npm run start
 ```
+
+## Component Overview
+tbd.
+
+## How to add new poi types
+tbd.
