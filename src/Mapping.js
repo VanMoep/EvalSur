@@ -155,7 +155,7 @@ const mapping = {
 const overpassQuery = function (types) {
     var query = "[timeout:25] [out:json] ; (";
     types.forEach(type => {
-        query += "  nwr " + mapping[type].query + " (around:<RANGE>,<LAT>,<LON>);";
+        query += "\n  nwr " + mapping[type].query + " (around:<RANGE>,<LAT>,<LON>);";
     });
     query += ");  out center;  >; out skel qt;";
     return query;
@@ -166,15 +166,15 @@ const getAllTypes = function () {
 }
 
 const typeIconMapper = function (type) {
-    if (type == "position") {
+    if (type === "position") {
         return <AddIcon style={{
             color: typeColorMapper(type)
         }} />;
-    } if (type == "center") {
+    } if (type === "center") {
         return <CodeIcon style={{
             color: typeColorMapper(type)
         }} />;
-    } if (type == "unknown") {
+    } if (type === "unknown") {
         return <TurnedInIcon style={{
             color: typeColorMapper(type),
             margin: "2px"
@@ -190,9 +190,9 @@ const typeIconMapper = function (type) {
 }
 
 const typeColorMapper = function (type) {
-    if (type == "position") {
+    if (type === "position") {
         return blue[500];
-    } if (type == "center") {
+    } if (type === "center") {
         return blue[500];
     }
     if (mapping.hasOwnProperty(type))

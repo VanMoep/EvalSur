@@ -7,14 +7,7 @@ import ResultListDialog from "./ResultListDialog"
 
 class Bar extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
     render() {
-        const contentStyle = {
-            height: "90vh",
-            width: "100%"
-        };
         if (this.props.loading) {
             return (
                 <Paper style={{ padding: "5px" }}>
