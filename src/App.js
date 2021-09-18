@@ -119,8 +119,8 @@ class App extends React.Component {
     });
     const searchControl = new SearchControl({
       provider: new OpenStreetMapProvider(),
-      style: 'bar',
-      showMarker: false
+      showMarker: false,
+      autoClose: true
     });
     this.leafletMap.addControl(searchControl);
   }
@@ -197,16 +197,19 @@ class App extends React.Component {
           <ZoomControl position="topright" />
           <Markers osmData={this.state.osmData} searchCenter={this.state.defaultCenter} mapCenter={this.state.mapCenter ? this.state.mapCenter : this.state.defaultCenter} radius={this.state.defaultRange} />
           <Control position="topleft" >
-            <Fab size="small" onClick={() => {
-              navigator.geolocation.getCurrentPosition((position) => {
-                this.leafletMap.setView([position.coords.latitude, position.coords.longitude]);
-              });
-            }}>
-              <GpsNotFixedIcon />
-            </Fab>
+            <div class="leaflet-bar">
+              <a size="small" role="button" onClick={() => {
+                navigator.geolocation.getCurrentPosition((position) => {
+                  this.leafletMap.setView([position.coords.latitude, position.coords.longitude]);
+                });
+              }}>
+                <GpsNotFixedIcon size='small' style={{ paddingTop: "3px", paddingLeft: "2px" }} />
+              </a></div>
           </Control>
           <Control position="topleft" >
-            <RangeDialog defaultRange={this.state.defaultRange} handleRangeChange={this.handleRangeChange} loadOSMData={this.loadOSMData} />
+            <div class="leaflet-bar">
+              <RangeDialog defaultRange={this.state.defaultRange} handleRangeChange={this.handleRangeChange} loadOSMData={this.loadOSMData} />
+            </div>
           </Control>
           <Control position="bottomleft" >
             <Bar osmDataCounted={this.state.osmDataCounted} osmData={this.state.osmData} loading={this.state.loading} osmError={this.state.osmError} range={this.state.defaultRange} />
