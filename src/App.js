@@ -1,9 +1,7 @@
 import React from "react";
-import { Map, TileLayer, LayersControl } from "react-leaflet";
+import { Map, TileLayer, LayersControl, ZoomControl } from "react-leaflet";
 import "./App.css";
 import "leaflet/dist/leaflet.css";
-import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
-import "leaflet-fullscreen/dist/Leaflet.fullscreen.js";
 import Markers from "./Markers"
 import Bar from "./Bar"
 import Control from 'react-leaflet-control';
@@ -144,9 +142,9 @@ class App extends React.Component {
       <div className="App">
         <Map
           ref={this.setLeafletMapRef}
-          fullscreenControl={true}
           center={this.state.defaultCenter}
           zoom={this.state.defaultZoom}
+          zoomControl={false}
           onMove={this.handleMove}
         >
           <LayersControl position="topright">
@@ -196,6 +194,7 @@ class App extends React.Component {
               />
             </LayersControl.BaseLayer>
           </LayersControl>
+          <ZoomControl position="topright" />
           <Markers osmData={this.state.osmData} searchCenter={this.state.defaultCenter} mapCenter={this.state.mapCenter ? this.state.mapCenter : this.state.defaultCenter} radius={this.state.defaultRange} />
           <Control position="topleft" >
             <Fab size="small" onClick={() => {
