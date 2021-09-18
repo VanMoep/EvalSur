@@ -62,21 +62,19 @@ export default function RangeDialog({
             >
                 <DialogTitle id="alert-dialog-title">{"set range to search for POIs"}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        <Grid container spacing={2}>
-                            <Grid item>
-                            </Grid>
-                            <Grid item xs>
-                                <Typography id="discrete-slider-always" gutterBottom>
-                                </Typography>
-                                <Slider value={defaultRange} onChange={handleRangeChange}
-                                    aria-labelledby="discrete-slider-always" step={500} defaultValue={1500} min={500} max={3000}
-                                    marks={marks} getAriaValueText={valuetext} valueLabelDisplay="off" />
-                            </Grid>
-                            <Grid item>
-                            </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item>
                         </Grid>
-                    </DialogContentText>
+                        <Grid item xs>
+                            <Typography id="discrete-slider-always" gutterBottom>
+                            </Typography>
+                            <Slider value={defaultRange} onChange={handleRangeChange}
+                                aria-labelledby="discrete-slider-always" step={500} defaultValue={1500} min={500} max={3000}
+                                marks={marks} getAriaValueText={valuetext} valueLabelDisplay="off" />
+                        </Grid>
+                        <Grid item>
+                        </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>

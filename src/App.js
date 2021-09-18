@@ -12,6 +12,7 @@ import Fab from '@material-ui/core/Fab';
 import RangeDialog from "./RangeDialog"
 import { OpenStreetMapProvider, SearchControl } from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
+import { tagTypeMapper, overpassQuery, getAllTypes } from './Mapping.js'
 
 class App extends React.Component {
   leafletMap = null;
@@ -28,7 +29,6 @@ class App extends React.Component {
       loading: false
     };
     this.loadOSMData = this.loadOSMData.bind(this);
-    this.getTypeByTags = this.getTypeByTags.bind(this);
     this.handleRangeChange = this.handleRangeChange.bind(this);
     this.handleMove = this.handleMove.bind(this);
     this.handleOSMResponse = this.handleOSMResponse.bind(this);
@@ -73,7 +73,7 @@ class App extends React.Component {
     response
       .filter((entry) => (entry.type === "node" || entry.type === "way") && entry.lat && entry.tags)
       .map((entry, idx) => {
-        const tag = this.getTypeByTags(entry.tags);
+        const tag = tagTypeMapper(entry.tags);
         parsedEntries.push({
           name: entry.tags.name,
           lat: (entry.type === "node") ? entry.lat : entry.center.lat,
@@ -104,33 +104,7 @@ class App extends React.Component {
     });
   }
 
-  getTypeByTags(tags) {
-    if (tags.hasOwnProperty("shop") && tags.shop === "bakery")
-      return "bakery"
-    else if (tags.hasOwnProperty("shop") && tags.shop === "supermarket")
-      return "supermarket"
-    else if (tags.hasOwnProperty("shop") && tags.shop === "chemist")
-      return "chemist"
-    else if (tags.hasOwnProperty("amenity") && tags.amenity === "cinema")
-      return "cinema"
-    else if (tags.hasOwnProperty("sport") && tags.sport === "swimming")
-      return "swimming"
-    else if (tags.hasOwnProperty("amenity") && tags.amenity === "pharmacy")
-      return "pharmacy"
-    else if (tags.hasOwnProperty("amenity") && tags.amenity === "ice_cream")
-      return "ice_cream"
-    else if (tags.hasOwnProperty("amenity") && tags.amenity === "school")
-      return "school"
-    else if (tags.hasOwnProperty("amenity") && tags.amenity === "college")
-      return "college"
-    else if (tags.hasOwnProperty("amenity") && tags.amenity === "kindergarten")
-      return "kindergarten"
-    else if (tags.hasOwnProperty("leisure") && tags.leisure === "park")
-      return "park"
-    else if (tags.hasOwnProperty("leisure") && tags.leisure === "playground")
-      return "playground"
-    return "unknown";
-  }
+
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -138,12 +112,15 @@ class App extends React.Component {
         defaultCenter: [position.coords.latitude, position.coords.longitude]
       });
     });
-    fetch(process.env.PUBLIC_URL + "/data/overpassQL.txt", { mode: 'no-cors' }).then((res) =>
+    /*fetch(process.env.PUBLIC_URL + "/data/overpassQL.txt", { mode: 'no-cors' }).then((res) =>
       res.text().then((text) => {
         console.log("request for osm", text);
         this.setState({ osmRequest: text });
       })
-    );
+    );*/
+    this.setState({
+      osmRequest: overpassQuery(getAllTypes())
+    });
     const searchControl = new SearchControl({
       provider: new OpenStreetMapProvider(),
       style: 'bar',

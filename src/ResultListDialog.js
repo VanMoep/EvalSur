@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
-import { tagIconMapper, tagColorMapper } from './Mapping'
+import { typeIconMapper, typeColorMapper } from './Mapping'
 import Tooltip from '@material-ui/core/Tooltip';
 import Avatar from '@material-ui/core/Avatar';
 import Paper from '@material-ui/core/Paper';
@@ -47,8 +47,8 @@ export default function ResultListDialog({
         {Object.keys(osmDataCounted)
           .map((key) => (
             <Tooltip title={key} aria-label={key}>
-              <Badge badgeContent={osmDataCounted[key]} style={{ color: tagColorMapper(key) }}>
-                {tagIconMapper(key)}
+              <Badge badgeContent={osmDataCounted[key]} style={{ color: typeColorMapper(key) }}>
+                {typeIconMapper(key)}
               </Badge>
             </Tooltip>
           ))}
@@ -70,7 +70,7 @@ export default function ResultListDialog({
               <ListItem alignItems="flex-start" key={`listitem-${idx}`} >
                 <ListItemAvatar>
                   <Avatar>
-                    {tagIconMapper(entry.type)}
+                    {typeIconMapper(entry.type)}
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={entry.name} secondary={entry.address.street + " " + entry.address.housenumber + ", " + entry.address.postcode + " " + entry.address.city} />

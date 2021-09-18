@@ -2,7 +2,7 @@ import React from "react";
 import { Marker, Popup, Circle } from "react-leaflet";
 import L from "leaflet";
 import ReactDOMServer from 'react-dom/server';
-import { tagIconMapper } from './Mapping.js'
+import { typeIconMapper } from './Mapping.js'
 
 class Markers extends React.Component {
 
@@ -14,7 +14,7 @@ class Markers extends React.Component {
     getIconForType(type) {
         return L.divIcon({//TODO: set iconAnchor
             className: 'custom-icon',
-            html: ReactDOMServer.renderToString(tagIconMapper(type))
+            html: ReactDOMServer.renderToString(typeIconMapper(type))
         });
     }
 
