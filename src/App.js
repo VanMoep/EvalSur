@@ -1,6 +1,5 @@
 import React from "react";
 import { Map, TileLayer, LayersControl } from "react-leaflet";
-import L from "leaflet";
 import "./App.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
@@ -9,15 +8,10 @@ import Markers from "./Markers"
 import Bar from "./Bar"
 import Control from 'react-leaflet-control';
 import GpsNotFixedIcon from '@material-ui/icons/GpsNotFixed';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
 import Fab from '@material-ui/core/Fab';
-import Popup from 'reactjs-popup';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
-import 'reactjs-popup/dist/index.css';
 import RangeDialog from "./RangeDialog"
+import { OpenStreetMapProvider, SearchControl } from 'leaflet-geosearch';
+import 'leaflet-geosearch/dist/geosearch.css';
 
 class App extends React.Component {
   leafletMap = null;
@@ -150,6 +144,12 @@ class App extends React.Component {
         this.setState({ osmRequest: text });
       })
     );
+    const searchControl = new SearchControl({
+      provider: new OpenStreetMapProvider(),
+      style: 'bar',
+      showMarker: false
+    });
+    this.leafletMap.addControl(searchControl);
   }
 
   handleRangeChange(event, value) {
