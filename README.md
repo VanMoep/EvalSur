@@ -1,6 +1,6 @@
-# Create a new map using React Leaflet
+# Search for bakerys, supermarkets, etc. within a range to evaluate your new living area
 
-React Leaflet map example using the `Map` and `TileLayer` components with a OpenStreetMap basemap.
+
 
 ## Getting Started
 * Install dependencies
